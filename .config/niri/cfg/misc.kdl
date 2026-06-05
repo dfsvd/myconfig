@@ -12,8 +12,8 @@
     }
 
     cursor {
-        xcursor-theme "capitaine-cursors"
-        xcursor-size 24
+        xcursor-theme "Qogir-cursors"
+        xcursor-size 36
     }
 
     debug {

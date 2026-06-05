@@ -142,4 +142,3 @@ function y() {
 # 7. 提示符 (Prompt)
 # ==========================================
 eval "$(starship init zsh)"
-welcome

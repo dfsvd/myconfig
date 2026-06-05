@@ -8,7 +8,31 @@
     scale 1 // No scaling (use 2 for HiDPI)
 }
 
-output "HDMI-A-1" {
+// 可以在niri实例中运行`niri msg outputs`找到显示器名称。
+output "Invalid Vendor Codename - RTK 0x2560 0x25601440" {
+    // 取消注释以禁用此显示器。
+    // off
     mode "2560x1440@59.951"
-    transform "180"
+    transform "180" // 家里副屏物理倒放时取消注释
 }
+output "Najing CEC Panda FPD Technology CO. ltd 0x005F Unknown" {
+    // 取消注释以禁用此显示器
+    // off
+
+     // 默认聚焦在这个显示器
+    focus-at-startup
+
+    // 如果省略了刷新率，niri将为分辨率选择最高的刷新率。
+    mode "2560x1440@59.951"
+
+    // 您可以使用整数或分数量表，例如，比例为150％。
+    scale 1
+
+    // transform允许逆时针旋转显示，有效值为:
+    // normal, 90, 180, 270, flipped, flipped-90, flipped-180 and flipped-270.
+    transform "normal"
+
+    // 输出在所有显示器坐标空间中的位置。未明确配置位置的显示器将放置在所有已放置的显示器右侧
+    // position x=1280 y=0
+}
+
