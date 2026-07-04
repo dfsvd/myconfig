@@ -90,6 +90,7 @@ alias gs="git status"
 alias yay="paru"
 alias oc="opencode"
 alias cc="claude"
+alias zj="zellij"
 alias idf='source "/home/xinian/.espressif/tools/activate_idf_v5.5.4.sh"'
 alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 
@@ -137,6 +138,53 @@ function y() {
     fi
     rm -f -- "$tmp"
 }
+
+# ==========================================
+# 6. Tmux 快捷函数（来自 archibate/tmux-conf 的灵感）
+# ==========================================
+
+# tu — 快速 tmux 会话管理
+#   tu         → 用 fzf 模糊搜索已有会话（无 fzf 则列出所有会话）
+#   tu mysession → 创建/切换到指定会话
+#   tu .       → 用当前目录名创建/切换到会话
+function tu() {
+    if [ $# -ge 1 ]; then
+        local name="$1"
+        if [ "$name" = "." ]; then
+            name="$(basename "$(pwd)")"
+        fi
+        if tmux has-session -t "$name" 2>/dev/null; then
+            if [ -n "$TMUX" ]; then
+                tmux switch-client -t "$name"
+            else
+                tmux attach-session -t "$name"
+            fi
+        else
+            tmux new-session -d -s "$name" -c "$(pwd)"
+            if [ -n "$TMUX" ]; then
+                tmux switch-client -t "$name"
+            else
+                tmux attach-session -t "$name"
+            fi
+        fi
+    else
+        if ! command -v fzf &>/dev/null; then
+            tmux list-sessions
+            echo "---"
+            echo "用法: tu <会话名> 或 tu . （装 fzf 可交互选择）"
+            return
+        fi
+        local session
+        session=$(tmux list-sessions -F "#{session_name}" 2>/dev/null \
+            | fzf --height 40% --reverse --prompt="tmux session> ") \
+            && tmux switch-client -t "$session"
+    fi
+}
+
+# 其他 tmux 别名
+alias tls='tmux list-sessions'
+alias ta='tmux attach-session'
+alias tv='tmux capture-pane -pS - | less'
 
 # ==========================================
 # 7. 提示符 (Prompt)
